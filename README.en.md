@@ -9,6 +9,7 @@ No cartoon ball, no emoji, no spinner. One line, five colours, real numbers.
 - **Always visible** — shows `无任务` (idle) when nothing is running.
 - **Determinate** — percentage comes from a real `done/total`, from the session's todo list, or from that session's own average steps/turn and duration; it never runs an endless loading animation.
 - **All conversations** — every session the host is mid-step on is discovered automatically, with title, project directory, `turn/step` and elapsed time.
+- **Background jobs** — the host's `ctx.jobs` event stream is subscribed: background commands, subagents and long tasks appear the moment they register, across every conversation, and show how they ended.
 - **Draggable & collapsible** — position and open state persist in `localStorage`.
 - **Zero dependencies** — host half reads files, web half uses React plus the services the host already injects.
 
@@ -45,6 +46,8 @@ web (lib/client.js)  → slot conversation.session.header.actions
 
 host (lib/index.js)  AgentProgressService
   ├─ reads <DSH_HOME>/agent-progress/<sessionId>/*.json
+  ├─ subscribes ctx.jobs.events (process-wide, every session)
+  │     registered / progress / settled  =>  background-job rows
   └─ scans <DSH_HOME>/storages/session_projcache/sessions/*.json
         openStep != null + file rewritten within 2 min  =>  session is working
 ```
@@ -54,6 +57,7 @@ host (lib/index.js)  AgentProgressService
 ```bash
 node test/preflight.mjs
 node test/state-check.mjs
+node test/jobs-check.mjs
 ```
 
 ## Compatibility
@@ -62,8 +66,8 @@ DSH 0.2.x (desktop / web), Node.js ≥ 20 for the CLI. Peers: `@deepseek-ai/cord
 
 ## Limitations
 
-- Sessions only appear while they are actually working; an idle session with a detached background job is invisible to the host and therefore to this plugin.
-- Without a todo list or a `total`, the percentage is an estimate.
+- Background jobs are discovered from the host's in-process job registry: anything registered after the plugin loads is always visible, anything already running is picked up by the first poll through `jobs.list(sessionId)`. The registry itself does not survive a restart.
+- Without a todo list, a `total`, or a producer-published progress line, the percentage is an estimate.
 - Everything is read from local files under `<DSH_HOME>`; nothing is sent anywhere.
 
 ## License
