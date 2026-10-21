@@ -1,0 +1,62 @@
+{
+  "name": "dsh-agent-progress",
+  "version": "0.1.0",
+  "description": "常驻任务进度条：在 DeepSeek Harness 网页端显示当前对话与所有对话的实时任务进度（determinate, cross-session progress bar）。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "ap": "./bin/ap.mjs"
+  },
+  "files": [
+    "lib",
+    "bin",
+    "cordis.patch.yml",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "progress",
+    "progress-bar",
+    "agent",
+    "cli"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-home-paths": "^0.1.0-rc.6 || ^0.1.5-rc.1 || ^0.2.0-rc.1",
+    "@deepseek-ai/dsh-typert-protocol": "^0.1.0-rc.6 || ^0.1.5-rc.1 || ^0.2.0-rc.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Autodog875/dsh-agent-progress.git"
+  },
+  "homepage": "https://github.com/Autodog875/dsh-agent-progress#readme",
+  "bugs": {
+    "url": "https://github.com/Autodog875/dsh-agent-progress/issues"
+  }
+}
