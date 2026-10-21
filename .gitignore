@@ -1,0 +1,6 @@
+node_modules/
+test/node_modules/
+test/_copy-index.js
+*.bak-*
+*.tmp
+.DS_Store
