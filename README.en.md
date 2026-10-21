@@ -10,6 +10,7 @@ No cartoon ball, no emoji, no spinner. One line, five colours, real numbers.
 - **Determinate** — percentage comes from a real `done/total`, from the session's todo list, or from that session's own average steps/turn and duration; it never runs an endless loading animation.
 - **All conversations** — every session the host is mid-step on is discovered automatically, with title, project directory, `turn/step` and elapsed time.
 - **Background jobs** — the host's `ctx.jobs` event stream is subscribed: background commands, subagents and long tasks appear the moment they register, across every conversation, and show how they ended.
+- **Overall progress** — collapsed, the bar shows the weighted average of everything running (`total` as the weight, one unit otherwise), not just the newest task.
 - **Draggable & collapsible** — position and open state persist in `localStorage`.
 - **Zero dependencies** — host half reads files, web half uses React plus the services the host already injects.
 
@@ -17,7 +18,17 @@ No cartoon ball, no emoji, no spinner. One line, five colours, real numbers.
 
 Install `dsh-agent-progress` from the DSH plugin market and enable it, then refresh the page.
 
-For local development:
+### Directly from GitHub (before the npm release)
+
+The package is dependency-free plain JS, so a tag tarball installs fine:
+
+```bash
+pnpm add "https://github.com/Autodog875/dsh-agent-progress/archive/refs/tags/v0.1.1.tar.gz" --dir <DSH_HOME>/profiles/desktop
+```
+
+then flip it on in the market (the market owns the `bundles` list).
+
+### Local development
 
 ```bash
 pnpm add "link:/path/to/dsh-agent-progress" --dir <DSH_HOME>/profiles/desktop
@@ -66,6 +77,7 @@ DSH 0.2.x (desktop / web), Node.js ≥ 20 for the CLI. Peers: `@deepseek-ai/cord
 
 ## Limitations
 
+- The collapsed "overall" number is a weighted average, so a new 0% task can nudge it down for a moment; tasks younger than 2 s are left out of the average to avoid the lurch.
 - Background jobs are discovered from the host's in-process job registry: anything registered after the plugin loads is always visible, anything already running is picked up by the first poll through `jobs.list(sessionId)`. The registry itself does not survive a restart.
 - Without a todo list, a `total`, or a producer-published progress line, the percentage is an estimate.
 - Everything is read from local files under `<DSH_HOME>`; nothing is sent anywhere.
