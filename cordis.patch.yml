@@ -1,0 +1,6 @@
+# dsh-agent-progress bundle patch — inserts the `agent-progress` row into the profile.
+#
+# No configuration is required: records live under `<DSH home>/agent-progress/<session>/`.
+- insert:
+    - id: agent-progress
+      name: 'dsh-agent-progress'
